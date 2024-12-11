@@ -1,0 +1,50 @@
+#!/bin/bash
+# 功能: 运行 Python 脚本并保存带标签的日志
+
+logdir="exp_log"  # 默认日志目录
+tag="default"     # 默认标签
+
+# 检查并解析参数
+while [[ "$1" == "--"* ]]; do
+    case "$1" in
+        --logdir)
+            logdir="$2"
+            shift 2
+            ;;
+        --tag)
+            tag="$2"
+            shift 2
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# 检查日志目录是否存在
+if [ ! -d "$logdir" ]; then
+    echo "Error: '$logdir' folder does not exist!"
+    exit 1
+fi
+
+# 检查是否提供了 Python 脚本
+if [ -z "$1" ]; then
+    echo "Error: No Python script specified!"
+    echo "Usage: exppy [--logdir <dir>] [--tag <tag>] <script.py> [arguments...]"
+    echo "  --logdir <dir>    Specify the log directory (default: exp_log)"
+    echo "  --tag <tag>       Specify a custom tag for the log file (default: default)"
+    echo "  <script.py>       Python script to execute"
+    echo "  [arguments...]    Additional arguments to pass to the Python script"
+    exit 1
+fi
+
+# 获取当前日期时间
+timestamp=$(date +"%Y_%m_%d-%H_%M")
+
+# 运行命令并将输出保存到日志文件
+logfile="${logdir}/${tag}_${timestamp}.log"
+nohup python "$@" > "$logfile" 2>&1 &
+
+echo "Command executed: python $@"
+echo "Logs are being saved to: $logfile"
