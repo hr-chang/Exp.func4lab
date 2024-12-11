@@ -22,12 +22,6 @@ while [[ "$1" == "--"* ]]; do
     esac
 done
 
-# 检查日志目录是否存在
-if [ ! -d "$logdir" ]; then
-    echo "Error: '$logdir' folder does not exist!"
-    exit 1
-fi
-
 # 检查是否提供了 Python 脚本
 if [ -z "$1" ]; then
     echo "Error: No Python script specified!"
@@ -36,6 +30,12 @@ if [ -z "$1" ]; then
     echo "  --tag <tag>       Specify a custom tag for the log file (default: default)"
     echo "  <script.py>       Python script to execute"
     echo "  [arguments...]    Additional arguments to pass to the Python script"
+    exit 1
+fi
+
+# 检查日志目录是否存在
+if [ ! -d "$logdir" ]; then
+    echo "Error: '$logdir' folder does not exist!"
     exit 1
 fi
 
