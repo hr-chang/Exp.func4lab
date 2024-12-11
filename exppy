@@ -1,5 +1,5 @@
 #!/bin/bash
-# 功能: 运行 Python 脚本并保存带标签的日志
+# 功能: 运行 Python 脚本并保存带标签的日志，并输出进程号
 
 logdir="exp_log"  # 默认日志目录
 tag="default"     # 默认标签
@@ -46,5 +46,8 @@ timestamp=$(date +"%Y_%m_%d-%H_%M")
 logfile="${logdir}/${tag}_${timestamp}.log"
 nohup python "$@" > "$logfile" 2>&1 &
 
+# 获取进程号 (PID) 并输出
+pid=$!
 echo "Command executed: python $@"
 echo "Logs are being saved to: $logfile"
+echo "Process ID (PID): $pid"
